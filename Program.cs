@@ -6,11 +6,12 @@
 */
 var builder = WebApplication.CreateBuilder(args);
 #region Services
-builder.Services.AddCors(options =>
-{
-  options.AddDefaultPolicy(configuration =>
-  {
-    var allowedOrigins = builder.Configuration.GetSection("ApiSettings:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(options => {
+  options.AddDefaultPolicy(configuration => {
+    var allowedOrigins =
+        builder.Configuration.GetSection("ApiSettings:AllowedOrigins")
+            .Get<string[]>() ??
+        [];
     configuration.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader();
   });
 });
