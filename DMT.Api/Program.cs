@@ -8,6 +8,9 @@
 using Scalar.AspNetCore;
 using Serilog;
 using DMT.Infrastructure.Extensions;
+using FluentValidation;
+using DMT.Api.Exceptions;
+using DMT.Api.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 #region Services
@@ -51,12 +54,22 @@ builder.Services
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 
+// Add FluentValidation from Application assembly
+var applicationAssembly = typeof(DMT.Application.Features.Products.Commands.CreateProduct.CreateProductCommand).Assembly;
+builder.Services.AddValidatorsFromAssembly(applicationAssembly);
+
+// Add MediatR with assembly scanning
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    cfg.RegisterServicesFromAssemblyContaining<DMT.Application.Features.Products.Queries.GetProducts.GetProductsQuery>();
+    cfg.RegisterServicesFromAssembly(applicationAssembly);
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+
+// Add exception handling
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddOpenApi();
 builder.Services.AddCarter();
@@ -64,6 +77,7 @@ builder.Services.AddCarter();
 
 var app = builder.Build();
 #region Middlewares
+app.UseExceptionHandler();
 app.UseCors();
 if (app.Environment.IsDevelopment())
 {

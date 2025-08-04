@@ -1,3 +1,4 @@
+using DMT.Application.Exceptions;
 using DMT.Application.Interfaces.Repositories;
 using DMT.Domain.Entities;
 using MediatR;

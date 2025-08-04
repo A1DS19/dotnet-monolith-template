@@ -27,7 +27,7 @@ public class LoggingBehavior<TRequest, TResponse>(
     {
         var requestName = typeof(TRequest).Name;
         var responseName = typeof(TResponse).Name;
-        
+
         // Always log basic info
         logger.LogInformation("[START] Handling {RequestName} → {ResponseName}", requestName, responseName);
 
@@ -45,7 +45,7 @@ public class LoggingBehavior<TRequest, TResponse>(
 
         timer.Stop();
         var timeTaken = timer.Elapsed;
-        
+
         // Always log completion with timing
         logger.LogInformation(
             "[END] Completed {RequestName} → {ResponseName} ⏱️ {ElapsedMs}ms",

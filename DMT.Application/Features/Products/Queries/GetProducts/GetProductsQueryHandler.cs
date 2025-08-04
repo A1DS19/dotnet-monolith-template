@@ -1,4 +1,5 @@
 using DMT.Application.Dtos;
+using DMT.Application.Exceptions;
 using DMT.Application.Interfaces.Repositories;
 using MediatR;
 

@@ -35,7 +35,8 @@ A production-ready .NET 9 minimal API template with clean architecture, CQRS pat
 ### **Cross-Cutting Concerns**
 - **CORS** - Configurable cross-origin resource sharing
 - **Global Exception Handling** - Centralized error management
-- **Validation** - Input validation with proper error responses
+- **FluentValidation** - Comprehensive input validation with detailed error responses
+- **Validation Pipeline** - Automatic validation via MediatR behaviors
 - **Health Checks** - Service health monitoring endpoints
 
 ## Getting Started
@@ -77,14 +78,15 @@ docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -
 ```
 DMT.Api/                    # Presentation Layer
 ├── Behaviors/              # MediatR cross-cutting concerns
+├── Middleware/             # Custom middleware (validation, etc.)
 ├── Modules/                # Carter API modules/routes
 └── Program.cs              # Application bootstrap
 
 DMT.Application/            # Application Layer
 ├── Features/               # CQRS commands/queries
 │   └── Products/
-│       ├── Commands/       # Write operations
-│       └── Queries/        # Read operations
+│       ├── Commands/       # Write operations + validators
+│       └── Queries/        # Read operations + validators
 ├── Dtos/                   # Data transfer objects
 ├── Interfaces/             # Application contracts
 └── Services/               # Application services
@@ -197,52 +199,3 @@ docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -
 # Run database setup
 docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong!Passw0rd" -C -i /tmp/SetupDatabase.sql
 ```
-## Monitoring & Debugging
-
-### Seq Logs
-- Access: `http://localhost:5341`
-- Credentials: `admin` / `Admin123!`
-- Features: Structured logging, filtering, dashboards
-
-### Performance Monitoring
-- Request/response logging with timing
-- Slow query detection (>3s warning)
-- Configurable log levels per environment
-
-### Hot Reload Development
-- Real-time code changes
-- Automatic rebuild and restart
-- Source code volume mounting
-
-## Architecture Principles
-
-### Dependency Flow
-```
-DMT.Api → DMT.Infrastructure → DMT.Application → DMT.Domain
-```
-
-### Layer Responsibilities
-- **Domain**: Core business entities and rules
-- **Application**: Use cases, CQRS handlers, business logic
-- **Infrastructure**: Data access, external services, implementations
-- **API**: HTTP endpoints, dependency injection, cross-cutting concerns
-
-## Production Considerations
-
-### Performance
-- Configurable logging to reduce overhead
-- Connection pooling for database access
-- Compact JSON serialization
-- Response caching strategies
-
-### Security
-- Environment-specific configurations
-- Secrets management via environment variables
-- CORS policy configuration
-- Input validation and sanitization
-
-### Scalability
-- Stateless API design
-- Redis for distributed caching
-- Horizontal scaling ready
-- Database connection optimization
