@@ -4,6 +4,7 @@ using DMT.Application.Features.Products.Commands.CreateProduct;
 using DMT.Application.Features.Products.Queries.GetProducts;
 using DMT.Application.Features.Products.Queries.GetProduct;
 using MediatR;
+using Microsoft.AspNetCore.RateLimiting;
 
 public class ProductsModuleV1 : ICarterModule
 {
@@ -23,7 +24,8 @@ public class ProductsModuleV1 : ICarterModule
         .WithName("GetProducts")
         .WithSummary("Gets a list of paginated products")
         .Produces<PaginatedResponse<ProductDto>>()
-        .ProducesValidationProblem();
+        .ProducesValidationProblem()
+        .RequireRateLimiting("FixedPolicy");
 
         group.MapGet("/{id:int}", async (IMediator mediator, int id) =>
         {
@@ -35,7 +37,8 @@ public class ProductsModuleV1 : ICarterModule
         .WithSummary("Gets a product by ID")
         .Produces<ProductDto>()
         .Produces(404)
-        .ProducesValidationProblem();
+        .ProducesValidationProblem()
+        .RequireRateLimiting("FixedPolicy");
 
         group.MapPost("/", async (IMediator mediator, CreateProductCommand command) =>
         {
@@ -45,6 +48,7 @@ public class ProductsModuleV1 : ICarterModule
         .WithName("CreateProduct")
         .WithSummary("Creates a new product")
         .Produces<CreateProductResponse>(201)
-        .ProducesValidationProblem();
+        .ProducesValidationProblem()
+        .RequireRateLimiting("SlidingPolicy");
     }
 }

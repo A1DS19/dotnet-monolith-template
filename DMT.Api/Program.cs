@@ -11,6 +11,9 @@ using DMT.Infrastructure.Extensions;
 using FluentValidation;
 using DMT.Api.Exceptions;
 using DMT.Api.Behaviors;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 #region Services
@@ -71,6 +74,46 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+// Add Rate Limiting
+var rateLimitConfig = builder.Configuration.GetSection("RateLimiting");
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("FixedPolicy", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = rateLimitConfig.GetValue<int>("FixedWindow:PermitLimit");
+        limiterOptions.Window = TimeSpan.Parse(rateLimitConfig.GetValue<string>("FixedWindow:Window")!);
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 5;
+    });
+
+    options.AddSlidingWindowLimiter("SlidingPolicy", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = rateLimitConfig.GetValue<int>("SlidingWindow:PermitLimit");
+        limiterOptions.Window = TimeSpan.Parse(rateLimitConfig.GetValue<string>("SlidingWindow:Window")!);
+        limiterOptions.SegmentsPerWindow = rateLimitConfig.GetValue<int>("SlidingWindow:SegmentsPerWindow");
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 2;
+    });
+
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = 429;
+        await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", token);
+    };
+});
+
+// Add Health Checks
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy())
+    .AddSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")!,
+        name: "sqlserver",
+        tags: new[] { "db", "sql", "sqlserver" })
+    .AddRedis(
+        builder.Configuration.GetConnectionString("Redis")!,
+        name: "redis",
+        tags: new[] { "cache", "redis" });
+
 builder.Services.AddOpenApi();
 builder.Services.AddCarter();
 #endregion Services
@@ -79,11 +122,15 @@ var app = builder.Build();
 #region Middlewares
 app.UseExceptionHandler();
 app.UseCors();
+app.UseRateLimiter();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+
 app.MapCarter();
 #endregion Middlewares
 

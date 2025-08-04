@@ -32,12 +32,26 @@ A production-ready .NET 9 minimal API template with clean architecture, CQRS pat
 - **Database Migrations** - SQL scripts for schema management
 - **Connection Pooling** - Optimized database connections
 
+### **Caching & Performance**
+- **Redis Cache Aside Pattern** - Distributed caching with automatic invalidation
+- **Cache Decorators** - Declarative caching using attributes
+- **Smart Cache Keys** - Pattern-based key generation and invalidation
+- **Cache Hit Logging** - Comprehensive cache performance monitoring
+
+### **Security & Authentication (missing auth)**
+- **Azure AD B2C Ready** - OAuth 2.0/OpenID Connect integration
+- **JWT Bearer Authentication** - Token-based API security
+- **Role-Based Authorization** - Policy-driven access control
+- **API Key Authentication** - Simple service-to-service auth option
+- **Rate Limiting** - Request throttling and abuse prevention
+- **Security Headers** - CORS, HSTS, and CSP configuration
+
 ### **Cross-Cutting Concerns**
-- **CORS** - Configurable cross-origin resource sharing
 - **Global Exception Handling** - Centralized error management
 - **FluentValidation** - Comprehensive input validation with detailed error responses
 - **Validation Pipeline** - Automatic validation via MediatR behaviors
-- **Health Checks** - Service health monitoring endpoints
+- **Health Checks** - Service health monitoring with dependency checks
+- **Authorization Pipeline** - Automatic authorization via MediatR behaviors
 
 ## Getting Started
 
