@@ -1,28 +1,20 @@
-using DMT.Application.Exceptions;
-using DMT.Application.Interfaces.Repositories;
-using DMT.Domain.Entities;
+using DMT.Application.Interfaces.Services;
 using MediatR;
 
 namespace DMT.Application.Features.Products.Commands.CreateProduct;
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResponse>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IProductService _productService;
 
-    public CreateProductCommandHandler(IProductRepository productRepository)
+    public CreateProductCommandHandler(IProductService productService)
     {
-        _productRepository = productRepository;
+        _productService = productService;
     }
 
     public async Task<CreateProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = new Product
-        {
-            Name = request.Name,
-            Price = request.Price
-        };
-
-        var createdProduct = await _productRepository.CreateAsync(product);
+        var createdProduct = await _productService.CreateAsync(request.Name, request.Price);
 
         return new CreateProductResponse(
             createdProduct.ID,

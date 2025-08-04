@@ -55,14 +55,13 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 // Add FluentValidation from Application assembly
-var applicationAssembly = typeof(DMT.Application.Features.Products.Commands.CreateProduct.CreateProductCommand).Assembly;
-builder.Services.AddValidatorsFromAssembly(applicationAssembly);
+builder.Services.AddValidatorsFromAssembly(DMT.Application.AssemblyReference.Assembly);
 
 // Add MediatR with assembly scanning
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    cfg.RegisterServicesFromAssembly(applicationAssembly);
+    cfg.RegisterServicesFromAssembly(DMT.Application.AssemblyReference.Assembly);
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });

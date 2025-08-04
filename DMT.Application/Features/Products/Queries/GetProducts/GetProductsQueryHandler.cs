@@ -1,32 +1,24 @@
-using DMT.Application.Dtos;
-using DMT.Application.Exceptions;
-using DMT.Application.Interfaces.Repositories;
+using DMT.Application.Interfaces.Services;
 using MediatR;
 
 namespace DMT.Application.Features.Products.Queries.GetProducts;
 
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, GetProductsResponse>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IProductService _productService;
 
-    public GetProductsQueryHandler(IProductRepository productRepository)
+    public GetProductsQueryHandler(IProductService productService)
     {
-        _productRepository = productRepository;
+        _productService = productService;
     }
 
     public async Task<GetProductsResponse> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _productRepository.GetAllAsync();
-
-        var productDtos = products.Select(p => new ProductDto(p.Name, p.Price));
-
-        var pagedProducts = productDtos
-            .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize);
+        var (products, totalCount) = await _productService.GetPagedAsync(request.Page, request.PageSize);
 
         return new GetProductsResponse(
-            pagedProducts,
-            products.Count(),
+            products,
+            totalCount,
             request.Page,
             request.PageSize
         );
