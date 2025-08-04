@@ -44,7 +44,7 @@ public class ProductsService : IProductService
 
         // Business logic - data cleaning and rules
         var cleanName = name.Trim();
-        var roundedPrice = Math.Round(price, 2);
+        var roundedPrice = (float)Math.Round(price, 2);
 
         if (string.IsNullOrWhiteSpace(cleanName))
         {
