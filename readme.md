@@ -1,4 +1,4 @@
-# DMT API - .NET 9 Minimal API Template
+# DMT API - .NET 9 Dotnet monolith template
 
 A production-ready .NET 9 minimal API template with clean architecture, CQRS pattern, and comprehensive development tooling for rapid development and prototyping.
 
