@@ -6,9 +6,19 @@
 */
 
 using Scalar.AspNetCore;
+using Serilog;
+using DMT.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 #region Services
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.Console()
+    .WriteTo.Seq("http://localhost:5341")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(configuration =>
@@ -20,6 +30,7 @@ builder.Services.AddCors(options =>
         configuration.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader();
     });
 });
+
 builder.Services
     .AddApiVersioning(options =>
     {
@@ -37,6 +48,16 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplicationServices();
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    cfg.RegisterServicesFromAssemblyContaining<DMT.Application.Features.Products.Queries.GetProducts.GetProductsQuery>();
+    cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
+});
+
 builder.Services.AddOpenApi();
 builder.Services.AddCarter();
 #endregion Services
@@ -52,4 +73,16 @@ if (app.Environment.IsDevelopment())
 app.MapCarter();
 #endregion Middlewares
 
-app.Run();
+try
+{
+    Log.Information("Starting web application");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

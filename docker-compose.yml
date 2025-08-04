@@ -79,6 +79,9 @@ services:
     volumes:
       # Source code volumes for hot reload
       - ./DMT.Api:/src/DMT.Api:cached
+      - ./DMT.Application:/src/DMT.Application:cached
+      - ./DMT.Domain:/src/DMT.Domain:cached
+      - ./DMT.Infraestructure:/src/DMT.Infraestructure:cached
       - ./DMT.Api/appsettings.json:/src/DMT.Api/appsettings.json:cached
       - ./DMT.Api/appsettings.Development.json:/src/DMT.Api/appsettings.Development.json:cached
       # Persistent logs

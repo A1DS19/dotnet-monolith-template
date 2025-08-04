@@ -1,7 +1,10 @@
 # === BASE STAGE ===
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS base
 WORKDIR /src
-# Copy project files and restore dependencies
+# Copy all project files and restore dependencies
+COPY ["DMT.Domain/DMT.Domain.csproj", "DMT.Domain/"]
+COPY ["DMT.Application/DMT.Application.csproj", "DMT.Application/"]
+COPY ["DMT.Infraestructure/DMT.Infraestructure.csproj", "DMT.Infraestructure/"]
 COPY ["DMT.Api/DMT.Api.csproj", "DMT.Api/"]
 RUN dotnet restore "DMT.Api/DMT.Api.csproj"
 COPY . .

@@ -11,8 +11,17 @@
     <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageReference Include="Carter" Version="9.0.0" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.6.8" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DMT.Domain\DMT.Domain.csproj" />
+    <ProjectReference Include="..\DMT.Application\DMT.Application.csproj" />
+    <ProjectReference Include="..\DMT.Infraestructure\DMT.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>
