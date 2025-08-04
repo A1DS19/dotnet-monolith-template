@@ -4,9 +4,9 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchUrl": "swagger",
+      "launchUrl": "scalar/v1",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:8080",
+      "applicationUrl": "http://localhost:9090",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -14,8 +14,9 @@
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
+      "launchUrl": "scalar/v1",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:8081;http://localhost:8080",
+      "applicationUrl": "https://localhost:9091;http://localhost:9090",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
