@@ -185,6 +185,14 @@ ASPNETCORE_URLS: "http://+:9090"
 }
 ```
 
+## Rate Limiting
+
+The API includes two rate limiting policies:
+- **FixedPolicy**: 100 requests per minute (applied to GET endpoints using `.RequireRateLimiting("FixedPolicy")`)
+- **SlidingPolicy**: 10 requests per 10 seconds (applied to POST/PUT/DELETE endpoints using `.RequireRateLimiting("SlidingPolicy")`)
+
+Configure limits in `appsettings.json` under the `RateLimiting` section. When exceeded, returns HTTP 429 with "Too many requests" message.
+
 ## 🛠️ Development Commands
 
 ### Docker Operations
