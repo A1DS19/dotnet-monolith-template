@@ -1,11 +1,12 @@
 using FluentValidation;
 using MediatR;
+using DMT.Application.Common.CQRS;
 
 namespace DMT.Api.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull, IRequest<TResponse>
+    where TRequest : notnull, ICommonOperationRequest<TResponse>
     where TResponse : notnull
 {
     public async Task<TResponse> Handle(

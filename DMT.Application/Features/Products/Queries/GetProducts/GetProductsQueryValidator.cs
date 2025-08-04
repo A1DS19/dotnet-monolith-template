@@ -8,7 +8,9 @@ public class GetProductsQueryValidator : AbstractValidator<GetProductsQuery>
     {
         RuleFor(x => x.Page)
             .GreaterThan(0)
-                .WithMessage("Page number must be greater than 0");
+                .WithMessage("Page number must be greater than 0")
+            .LessThanOrEqualTo(1000)
+                .WithMessage("Page number must not exceed 1000");
 
         RuleFor(x => x.PageSize)
             .GreaterThan(0)

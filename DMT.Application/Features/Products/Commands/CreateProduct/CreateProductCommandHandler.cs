@@ -1,9 +1,9 @@
+using DMT.Application.Common.CQRS;
 using DMT.Application.Interfaces.Services;
-using MediatR;
 
 namespace DMT.Application.Features.Products.Commands.CreateProduct;
 
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResponse>
+public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductResponse>
 {
     private readonly IProductService _productService;
 

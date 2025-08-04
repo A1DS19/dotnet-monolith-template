@@ -1,3 +1,5 @@
+using DMT.Application.Common.Extensions;
+using DMT.Application.Common.Pagination;
 using DMT.Application.Dtos;
 using DMT.Application.Exceptions;
 using DMT.Application.Interfaces.Repositories;
@@ -21,17 +23,12 @@ public class ProductsService : IProductService
         return products.Select(p => new ProductDto(p.Name, p.Price));
     }
 
-    public async Task<(IEnumerable<ProductDto> Products, int TotalCount)> GetPagedAsync(int page, int pageSize)
+    public async Task<PaginatedResponse<ProductDto>> GetPagedAsync(PaginatedRequest request, CancellationToken cancellationToken = default)
     {
         var allProducts = await _productRepository.GetAllAsync();
-        var totalCount = allProducts.Count();
+        var productDtos = allProducts.Select(p => new ProductDto(p.Name, p.Price));
 
-        var pagedProducts = allProducts
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(p => new ProductDto(p.Name, p.Price));
-
-        return (pagedProducts, totalCount);
+        return productDtos.ToPaginatedResponse(request);
     }
 
     public async Task<Product> CreateAsync(string name, float price)
