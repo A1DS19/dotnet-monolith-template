@@ -1,3 +1,3 @@
 namespace DMT.Application.Dtos;
 
-public record ProductDto(string Name, float price);
+public record ProductDto(int Id, string Name, float Price);

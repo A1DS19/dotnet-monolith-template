@@ -2,6 +2,7 @@ using DMT.Application.Common.Pagination;
 using DMT.Application.Dtos;
 using DMT.Application.Features.Products.Commands.CreateProduct;
 using DMT.Application.Features.Products.Queries.GetProducts;
+using DMT.Application.Features.Products.Queries.GetProduct;
 using MediatR;
 
 public class ProductsModuleV1 : ICarterModule
@@ -22,6 +23,18 @@ public class ProductsModuleV1 : ICarterModule
         .WithName("GetProducts")
         .WithSummary("Gets a list of paginated products")
         .Produces<PaginatedResponse<ProductDto>>()
+        .ProducesValidationProblem();
+
+        group.MapGet("/{id:int}", async (IMediator mediator, int id) =>
+        {
+            var query = new GetProductQuery(id);
+            var result = await mediator.Send(query);
+            return Results.Ok(result);
+        })
+        .WithName("GetProductById")
+        .WithSummary("Gets a product by ID")
+        .Produces<ProductDto>()
+        .Produces(404)
         .ProducesValidationProblem();
 
         group.MapPost("/", async (IMediator mediator, CreateProductCommand command) =>

@@ -3,8 +3,10 @@ using DMT.Application.Interfaces.Services;
 using DMT.Application.Services;
 using DMT.Infrastructure.Data;
 using DMT.Infrastructure.Repositories;
+using DMT.Infraestructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace DMT.Infrastructure.Extensions;
 
@@ -27,6 +29,22 @@ public static class ServiceCollectionExtensions
 
         // Register repositories
         services.AddScoped<IProductRepository, ProductRepository>();
+
+        // Register Redis caching
+        var redisConnectionString = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrWhiteSpace(redisConnectionString))
+        {
+            services.AddSingleton<IConnectionMultiplexer>(provider =>
+                ConnectionMultiplexer.Connect(redisConnectionString));
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = redisConnectionString;
+                options.InstanceName = "DMT";
+            });
+
+            services.AddScoped<ICacheService, RedisCacheService>();
+        }
 
         return services;
     }

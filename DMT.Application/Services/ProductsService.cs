@@ -20,13 +20,13 @@ public class ProductsService : IProductService
     public async Task<IEnumerable<ProductDto>> GetAllAsync()
     {
         var products = await _productRepository.GetAllAsync();
-        return products.Select(p => new ProductDto(p.Name, p.Price));
+        return products.Select(p => new ProductDto(p.ID, p.Name, p.Price));
     }
 
     public async Task<PaginatedResponse<ProductDto>> GetPagedAsync(PaginatedRequest request, CancellationToken cancellationToken = default)
     {
         var allProducts = await _productRepository.GetAllAsync();
-        var productDtos = allProducts.Select(p => new ProductDto(p.Name, p.Price));
+        var productDtos = allProducts.Select(p => new ProductDto(p.ID, p.Name, p.Price));
 
         return productDtos.ToPaginatedResponse(request);
     }
@@ -67,7 +67,7 @@ public class ProductsService : IProductService
     public async Task<ProductDto?> GetByIdAsync(int id)
     {
         var product = await _productRepository.GetByIdAsync(id);
-        return product != null ? new ProductDto(product.Name, product.Price) : null;
+        return product != null ? new ProductDto(product.ID, product.Name, product.Price) : null;
     }
 
     public async Task<bool> ExistsAsync(int id)

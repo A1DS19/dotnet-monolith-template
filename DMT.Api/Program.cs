@@ -64,6 +64,7 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(DMT.Application.AssemblyReference.Assembly);
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
+    cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
 });
 
 // Add exception handling
