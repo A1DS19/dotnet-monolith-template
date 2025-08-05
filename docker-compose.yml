@@ -78,6 +78,7 @@ services:
       - "9090:9090"
     volumes:
       # Source code volumes for hot reload
+      - ./scripts/:scripts:cached
       - ./DMT.Api:/src/DMT.Api:cached
       - ./DMT.Application:/src/DMT.Application:cached
       - ./DMT.Domain:/src/DMT.Domain:cached

@@ -190,3 +190,12 @@ docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -
 # Run database setup
 docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong!Passw0rd" -C -i /tmp/SetupDatabase.sql
 ```
+
+### OpenAPI Documentation
+```bash
+# Generate OpenAPI specification file
+./scripts/generate-openapi.sh
+
+# Output: out/openapi.json
+```
+The script checks if the API is running, downloads the OpenAPI spec, and saves it to `out/openapi.json` with file size and endpoint count information.
