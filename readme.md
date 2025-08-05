@@ -38,7 +38,7 @@ A production-ready .NET 9 minimal API template with clean architecture, CQRS pat
 - **Smart Cache Keys** - Pattern-based key generation and invalidation
 - **Cache Hit Logging** - Comprehensive cache performance monitoring
 
-### **Security & Authentication (missing auth)**
+### **Security & Authentication (missing auth add adb2c with hybrid local users table)**
 - **Azure AD B2C Ready** - OAuth 2.0/OpenID Connect integration
 - **JWT Bearer Authentication** - Token-based API security
 - **Role-Based Authorization** - Policy-driven access control
