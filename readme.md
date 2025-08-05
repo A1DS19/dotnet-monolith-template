@@ -77,7 +77,7 @@ docker compose logs -f api
 docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong!Passw0rd" -C -i /path/to/Database/SetupDatabase.sql
 ```
 
-## 🌐 Service URLs
+## Service URLs
 
 | Service | URL | Credentials |
 | :--- | :--- | :--- |
@@ -86,37 +86,6 @@ docker exec -it dmt-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -
 | **Seq Logs** | `http://localhost:5341` | `admin` / `Admin123!` |
 | **SQL Server** | `localhost:1433` | `sa` / `YourStrong!Passw0rd` |
 | **Redis** | `localhost:6379` | Password: `YourRedisPassword123` |
-
-## Project Structure
-
-```
-DMT.Api/                    # Presentation Layer
-├── Behaviors/              # MediatR cross-cutting concerns
-├── Middleware/             # Custom middleware (validation, etc.)
-├── Modules/                # Carter API modules/routes
-└── Program.cs              # Application bootstrap
-
-DMT.Application/            # Application Layer
-├── Features/               # CQRS commands/queries
-│   └── Products/
-│       ├── Commands/       # Write operations + validators
-│       └── Queries/        # Read operations + validators
-├── Dtos/                   # Data transfer objects
-├── Interfaces/             # Application contracts
-└── Services/               # Application services
-
-DMT.Infrastructure/         # Infrastructure Layer
-├── Data/                   # Database connection factory
-├── Extensions/             # Service registrations
-└── Repositories/           # Data access implementations
-
-DMT.Domain/                 # Domain Layer
-└── Entities/               # Core business entities
-
-Database/                   # Database Scripts
-├── SetupDatabase.sql       # Complete setup script
-└── README.md               # Database documentation
-```
 
 ## Configuration
 
